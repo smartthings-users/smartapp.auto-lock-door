@@ -35,7 +35,7 @@ preferences
 
 def installed()
 {
-    log.debug "Auto Lock Door installed. (URL: http://www.github.com/smartthings-users/smartapp.auto-lock-door)
+    log.debug "Auto Lock Door installed. (URL: http://www.github.com/smartthings-users/smartapp.auto-lock-door)"
     initialize()
 }
 
@@ -69,7 +69,7 @@ def doorHandler(evt)
     }
     else {                                      // If the door is unlocked then...
         def delay = minutesLater * 60           // runIn uses seconds
-        log.debug "Turning off switches in ${minutesLater} minutes (${delay}s)."
-        runIn( delay, lockDoor )                 // ...schedule to lock in x minutes.
+        log.debug "Re-arming lock in ${minutesLater} minutes (${delay}s)."
+        runIn( delay, lockDoor )                // ...schedule to lock in x minutes.
     }
 }
