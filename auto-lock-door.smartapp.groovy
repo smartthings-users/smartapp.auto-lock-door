@@ -50,7 +50,7 @@ def updated()
 def initialize()
 {
     log.debug "Settings: ${settings}"
-    subscribe(lock1, "lock", doorHandler, [filterEvents: false])
+    subscribe(lock1, "lock", doorHandler)
 }
 
 def lockDoor()
@@ -67,9 +67,12 @@ def doorHandler(evt)
         log.debug "Cancelling previous lock task..."
         unschedule( lockDoor )                  // ...we don't need to lock it later.
     }
-    else {                                      // If the door is unlocked then...
+    else if (evt.value == "unlock") {           // If the door is unlocked then...
         def delay = minutesLater * 60           // runIn uses seconds
         log.debug "Re-arming lock in ${minutesLater} minutes (${delay}s)."
         runIn( delay, lockDoor )                // ...schedule to lock in x minutes.
+    }
+    else {
+        log.debug "WARNING: Value ${evt.value} has not been processed."
     }
 }
