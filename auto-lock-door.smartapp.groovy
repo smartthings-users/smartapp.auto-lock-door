@@ -1,5 +1,5 @@
 /**
- *  Off Without Motion
+ *  Auto Lock Door
  *
  *  Author: Chris Sader (@csader)
  *  Collaborators: @chrisb
