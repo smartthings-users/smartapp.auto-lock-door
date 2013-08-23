@@ -55,7 +55,7 @@ def initialize()
 
 def lockDoor()
 {
-    log.debug "Locking ${name}."
+    log.debug "Locking ${name} after inactivity."
     lock1.lock()
 }
 
@@ -63,16 +63,16 @@ def doorHandler(evt)
 {
     log.debug "Lock ${evt.displayName} is ${evt.value}."
 
-    if (evt.value == "lock") {                  // If the human locks the door then...
+    if (evt.value == "locked") {                // If the human locks the door then...
         log.debug "Cancelling previous lock task for ${evt.displayName}..."
         unschedule()                            // ...we don't need to lock it later.
     }
-    else if (evt.value == "unlock") {           // If the door is unlocked then...
+    else if (evt.value == "unlocked") {         // If the door is unlocked then...
         def delay = minutesLater * 60           // runIn uses seconds
         log.debug "Re-arming ${evt.displayName} in ${minutesLater} minutes (${delay}s)."
         runIn( delay, lockDoor("${evt.displayName}") )                // ...schedule to lock in x minutes.
     }
     else {
-        log.debug "WARNING: Value ${evt.value} for ${evt.displayName} has not been processed."
+        log.warn "Value '${evt.value}' for '${evt.displayName}' has not been processed."
     }
 }
