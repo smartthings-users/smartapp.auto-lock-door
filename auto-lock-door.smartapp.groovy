@@ -53,7 +53,7 @@ def updated()
 def initialize()
 {
     log.debug "Settings: ${settings}"
-    subscribe(lock1, "lock", doorHandler, [filterEvents: false])
+    subscribe(lock1, "lock", doorHandler)
     subscribe(openSensor, "contact.closed", doorClosed)
     subscribe(openSensor, "contact.open", doorOpen)
 }
@@ -65,7 +65,7 @@ def lockDoor()
     	log.debug "Door Closed"
     	lock1.lock()
     } else {
-    	if((openSensor.latestValue("contact") == "open")){
+    	if ((openSensor.latestValue("contact") == "open")) {
         def delay = minutesLater * 60
         log.debug "Door open will try again in $minutesLater minutes"
         runIn( delay, lockDoor )
@@ -74,19 +74,19 @@ def lockDoor()
 }
 
 def doorOpen(evt) {
-log.debug "Door open reset previous lock task..."
-unschedule( lockDoor )
-def delay = minutesLater * 60
-runIn( delay, lockDoor )
+    log.debug "Door open reset previous lock task..."
+    unschedule( lockDoor )
+    def delay = minutesLater * 60
+    runIn( delay, lockDoor )
 }
 
 def doorClosed(evt) {
-log.debug "Door Closed"
+    log.debug "Door Closed"
 }
 
 def doorHandler(evt)
 {
-	log.debug "Door ${openSensor.latestValue}"
+    log.debug "Door ${openSensor.latestValue}"
     log.debug "Lock ${evt.name} is ${evt.value}."
 
     if (evt.value == "locked") {                  // If the human locks the door then...
